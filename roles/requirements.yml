@@ -1,0 +1,10 @@
+
+---
+
+- src: https://bitbucket.devnet.klm.com/scm/isautotwr/role_consul_upgrade.git
+  scm: git
+  version: feature_init
+
+- src: https://bitbucket.devnet.klm.com/scm/isautotwr/role_vault_upgrade.git
+  scm: git
+  version: feature-init
