@@ -1,0 +1,4 @@
+---
+# handlers file for role_vault_upgrade
+- name: restart vault
+  import_tasks: restart_vault.yml

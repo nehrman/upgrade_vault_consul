@@ -1,0 +1,52 @@
+---
+# tasks file for role_consul_upgrade
+
+- name: Populate service facts
+  service_facts:
+
+- name: Fail if consul service is not installed
+  fail:
+    msg: >
+      Consul service not found on {{ ansible_hostname }}. Please install consul using ansible.
+      Upgrade is Aborted!
+  when: ansible_facts.services["consul.service"] is not defined
+
+- name: Download consul enterprise package 
+  aws_s3:
+    aws_access_key: "{{ consul_aws_access_key }}"
+    aws_secret_key: "{{ consul_aws_secret_key }}"
+    bucket: "{{ consul_aws_bucket }}"
+    dest: "{{ consul_download_path }}/{{ consul_pkg }}"
+    mode: get
+    object: "{{ consul_aws_zip_path }}"
+    overwrite: different
+  delegate_to: 127.0.0.1
+  run_once: true
+  when: 
+
+- name: Unarchive consul package
+  unarchive:
+    src: "{{ consul_download_path }}/{{ consul_pkg }}"
+    dest: "{{ consul_download_path }}/"
+    creates: "{{ consul_download_path }}/consul"
+  delegate_to: 127.0.0.1
+
+- name: Get Owner and group of existing consul binaries
+  stat:
+    path: "{{ consul_bin_path }}/consul"
+  register: consul_bin_state
+
+- name: Install Consul
+  copy:
+    src: "{{ consul_download_path }}/consul"
+    dest: "{{ consul_bin_path }}/consul"
+    owner: "{{ consul_bin_state.stat.pw_name }}"
+    group: "{{ consul_bin_state.stat.gr_name }}"
+    mode: 0755
+  when: consul_bin_state.stat.exists | bool
+  notify:
+    - restart consul
+  
+
+
+    

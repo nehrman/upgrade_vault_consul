@@ -1,0 +1,10 @@
+---
+# defaults file for role_vault_upgrade
+vault_aws_bucket: "hc-enterprise-binaries"
+# vault_version: "1.3.0"
+# vault_aws_secret_key:
+# vault_aws_access_key:
+vault_pkg: "vault-enterprise_{{ vault_version }}+prem.hsm_linux_amd64.zip"
+vault_aws_zip_path: "vault/prem.hsm/{{ vault_version }}/{{ vault_pkg }}"
+vault_download_path: "/tmp"
+vault_bin_path: /usr/local/bin

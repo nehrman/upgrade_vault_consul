@@ -1,0 +1,4 @@
+---
+# handlers file for role_consul_upgrade
+- name: restart consul
+  import_tasks: restart_consul.yml
