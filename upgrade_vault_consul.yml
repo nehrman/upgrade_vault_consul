@@ -1,13 +1,15 @@
 ---
 
   - name: "Upgrade consul backend"
-    hosts: consul_instances
+    hosts: tha_consul_instances
+    become: true
     serial: 1
     roles:
       - role_consul_upgrade
 
   - name: "Upgrade vault service"
-    hosts: vault_instances
+    hosts: tha_vault_servers
+    become: true
     serial: 1
     roles:
       - role_vault_upgrade

@@ -1,0 +1,7 @@
+---
+- name: restart vault on Linux
+  service:
+    name: vault
+    state: restarted
+  when: ansible_os_family != "Windows"
+  listen: 'restart vault'

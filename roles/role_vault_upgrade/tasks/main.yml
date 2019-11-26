@@ -1,0 +1,52 @@
+---
+# tasks file for role_vault_upgrade
+
+- name: Populate service facts
+  service_facts:
+
+- name: Fail if vault service is not installed
+  fail:
+    msg: >
+      Vault service not found on {{ ansible_hostname }}. Please install vault using ansible.
+      Upgrade is Aborted!
+  when: ansible_facts.services["vault.service"] is not defined
+
+- name: Download vault enterprise package 
+  aws_s3:
+    aws_access_key: "{{ vault_aws_access_key }}"
+    aws_secret_key: "{{ vault_aws_secret_key }}"
+    bucket: "{{ vault_aws_bucket }}"
+    dest: "{{ vault_download_path }}/{{ vault_pkg }}"
+    mode: get
+    object: "{{ vault_aws_zip_path }}"
+    overwrite: different
+  delegate_to: 127.0.0.1
+  run_once: true
+  when: 
+
+- name: Unarchive vault package
+  unarchive:
+    src: "{{ vault_download_path }}/{{ vault_pkg }}"
+    dest: "{{ vault_download_path }}/"
+    creates: "{{ vault_download_path }}/vault"
+  delegate_to: 127.0.0.1
+
+- name: Get Owner and group of existing vault binaries
+  stat:
+    path: "{{ vault_bin_path }}/vault"
+  register: vault_bin_state
+
+- name: Install Vault
+  copy:
+    src: "{{ vault_download_path }}/vault"
+    dest: "{{ vault_bin_path }}/vault"
+    owner: "{{ vault_bin_state.stat.pw_name }}"
+    group: "{{ vault_bin_state.stat.gr_name }}"
+    mode: 0755
+  when: vault_bin_state.stat.exists | bool
+  notify:
+    - restart vault
+  
+
+
+    
