@@ -16,13 +16,14 @@
     aws_access_key: "{{ consul_aws_access_key }}"
     aws_secret_key: "{{ consul_aws_secret_key }}"
     bucket: "{{ consul_aws_bucket }}"
+    ignore_nonexistent_bucket: true
     dest: "{{ consul_download_path }}/{{ consul_pkg }}"
     mode: get
     object: "{{ consul_aws_zip_path }}"
     overwrite: different
+
   delegate_to: 127.0.0.1
-  run_once: true
-  when: 
+  run_once: true 
 
 - name: Unarchive consul package
   unarchive:

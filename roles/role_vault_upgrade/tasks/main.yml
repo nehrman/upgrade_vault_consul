@@ -18,11 +18,11 @@
     bucket: "{{ vault_aws_bucket }}"
     dest: "{{ vault_download_path }}/{{ vault_pkg }}"
     mode: get
+    ignore_nonexistent_bucket: true
     object: "{{ vault_aws_zip_path }}"
     overwrite: different
   delegate_to: 127.0.0.1
   run_once: true
-  when: 
 
 - name: Unarchive vault package
   unarchive:
