@@ -1,1 +1,2 @@
 consul_version: "1.7.0"
+consul_pkg: "consul-enterprise_1.7.0+prem-beta2_linux_amd64.zip"
