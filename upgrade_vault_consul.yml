@@ -1,30 +1,16 @@
 ---
 
-  - name: "Upgrade consul backend THA"
-    hosts: tha_consul_instances
+  - name: "Upgrade consul backend"
+    hosts: consul_instances
     become: true
     serial: 1
     roles:
       - role_consul_upgrade
 
-  - name: "Upgrade vault service THA"
-    hosts: tha_vault_servers
-    become: true
-    serial: 1
-    roles:
-      - role_vault_upgrade
-  
-  
-  - name: "Upgrade consul backend LBG"
-    hosts: lbg_consul_instances
-    become: true
-    serial: 1
-    roles:
-      - role_consul_upgrade
+  # - name: "Upgrade vault service THA"
+  #   hosts: tha_vault_servers
+  #   become: true
+  #   serial: 1
+  #   roles:
+  #     - role_vault_upgrade
 
-  - name: "Upgrade vault service LBG"
-    hosts: lbg_vault_servers
-    become: true
-    serial: 1
-    roles:
-      - role_vault_upgrade

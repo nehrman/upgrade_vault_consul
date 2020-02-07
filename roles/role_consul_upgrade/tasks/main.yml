@@ -23,6 +23,7 @@
     overwrite: different
 
   delegate_to: 127.0.0.1
+  become: false
   run_once: true 
 
 - name: Unarchive consul package
@@ -31,6 +32,7 @@
     dest: "{{ consul_download_path }}/"
     creates: "{{ consul_download_path }}/consul"
   delegate_to: 127.0.0.1
+  become: false
 
 - name: Get Owner and group of existing consul binaries
   stat:
@@ -47,6 +49,24 @@
   when: consul_bin_state.stat.exists | bool
   notify:
     - restart consul
+  
+#   # This should succeed regardless of seal state
+# - name: Consul Autopilot Healthy ?
+#   uri:
+#     validate_certs: "{{ validate_certs_during_api_reachable_check | bool }}"
+#     url: "{{ consul_tls_disable | ternary('http', 'https') }}://{{ (consul_address == '0.0.0.0') | ternary('127.0.0.1', consul_address) }}:{{ consul_port }}/v1/operator/autopilot/health"
+#     method: GET
+#     # 200 if initialized, unsealed, and active.
+#     # 429 is also OK for HA cluster (means standby + unsealed in HA)
+#     # 473 is also OK for Performance Standby (Enterprise feature)
+#     # See: https://www.vaultproject.io/api/system/health.html
+#     status_code: "200"
+#     body_format: json
+#   register: check_result
+#   retries: 30
+#   until: check_result is succeeded
+#   delay: 10
+#   changed_when: false
   
 
 

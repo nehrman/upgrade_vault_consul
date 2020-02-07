@@ -1,8 +1,8 @@
 ---
 # defaults file for role_consul_upgrade
 consul_aws_bucket: "hc-enterprise-binaries"
-# consul_version: "1.6.2"
-consul_pkg: "consul-enterprise_{{ consul_version }}+prem_linux_amd64.zip"
-consul_aws_zip_path: "consul/prem/{{ consul_version }}/{{ consul_pkg }}"
+consul_version: "1.6.2"
+consul_pkg: "consul-enterprise_{{ consul_version }}+ent_linux_amd64.zip"
+consul_aws_zip_path: "consul/ent/{{ consul_version }}/{{ consul_pkg }}"
 consul_download_path: "/tmp"
 consul_bin_path: /usr/local/bin
